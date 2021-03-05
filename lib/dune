@@ -1,0 +1,4 @@
+(library
+  (name lib)
+  (public_name hello-ocaml)
+  (libraries ctypes ctypes.foreign))

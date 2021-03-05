@@ -1,0 +1,31 @@
+{
+  "name": "hello-ocaml",
+  "version": "0.1.0",
+  "description": "OCaml workflow with Esy",
+  "license": "MIT",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "release": {
+      "bin": "hello",
+      "includePackages": [
+        "root",
+        "@opam/camomile"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "esy x hello"
+  },
+  "dependencies": {
+    "@opam/ctypes": "0.15.0",
+    "@opam/ctypes-foreign": "0.4.0",
+    "@opam/dune": "*",
+    "ocaml": "~4.11.1000"
+  },
+  "devDependencies": {
+    "@opam/ocaml-lsp-server": "*",
+    "@opam/ocamlfind-secondary": "*",
+    "@opam/merlin": "*",
+    "ocaml": "~4.11.1000"
+  }
+}
