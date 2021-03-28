@@ -17,3 +17,7 @@ let napi_create_bigint_words = foreign "napi_create_bigint_words" (napi_env @-> 
 let napi_get_value_bigint_int64 = foreign "napi_get_value_bigint_int64" (napi_env @-> napi_value @-> ptr(int64_t) @-> ptr(bool) @-> returning napi_status)
 let napi_get_value_bigint_uint64 = foreign "napi_get_value_bigint_uint64" (napi_env @-> napi_value @-> ptr(uint64_t) @-> ptr(bool) @-> returning napi_status)
 let napi_get_value_bigint_words = foreign "napi_get_value_bigint_words" (napi_env @-> napi_value @-> ptr(int) @-> ptr(size_t) @-> ptr(uint64_t) @-> returning napi_status)
+
+module Properties = struct
+  let napi_get_all_property_names = foreign "napi_get_all_property_names" (napi_env @-> napi_value @-> napi_key_collection_mode @-> napi_key_filter @-> napi_key_conversion @-> ptr(napi_value) @-> returning napi_status)
+end

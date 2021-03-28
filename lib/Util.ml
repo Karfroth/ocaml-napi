@@ -28,6 +28,11 @@ let napi_escapable_handle_scope: napi_escapable_handle_scope typ = ptr void
 type napi_ref = unit ptr
 let napi_ref: napi_ref typ = ptr void
 
+type napi_callback_info = unit ptr
+let napi_callback_info: napi_callback_info typ = ptr void
+let napi_callback = funptr (napi_env @-> napi_callback_info @-> returning napi_value)
+
+
 (* Error Handling *)
 let napi_get_last_error_info = foreign "napi_get_last_error_info" (napi_env @-> ptr(ptr(napi_extended_error_info)) @-> returning napi_status)
 
@@ -129,3 +134,35 @@ let napi_is_error = foreign "napi_is_error" (napi_env @-> napi_value @-> ptr(boo
 let napi_is_typedarray = foreign "napi_is_typedarray" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
 let napi_is_dataview = foreign "napi_is_dataview" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
 let napi_strict_equals = foreign "napi_strict_equals" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
+
+(* Working with JavaScript properties *)
+(* Structures *)
+module Properties = struct
+  let napi_property_attributes = uint64_t (* TODO: ENUM *)
+  type napi_property_descriptor
+  let napi_property_descriptor: napi_property_descriptor structure typ = structure "napi_property_descriptor"
+  let utf8name = field napi_property_descriptor "utf8name" string
+  let name = field napi_property_descriptor "name" napi_value
+  let _method = field napi_property_descriptor "method" napi_callback
+  let getter = field napi_property_descriptor "getter" napi_callback
+  let setter = field napi_property_descriptor "setter" napi_callback
+  let value = field napi_property_descriptor "value" napi_value
+  let attributes = field napi_property_descriptor "attributes" napi_property_attributes
+  let data = field napi_property_descriptor "data" (ptr void);;
+  seal napi_property_descriptor;;
+
+  let napi_get_property_names = foreign "napi_get_property_names" (napi_env @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
+  let napi_set_property = foreign "napi_set_property" (napi_env @-> napi_value @-> napi_value @-> napi_value @-> returning napi_status)
+  let napi_get_property = foreign "napi_get_property" (napi_env @-> napi_value @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
+  let napi_has_property = foreign "napi_has_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status);;
+  let napi_delete_property = foreign "napi_delete_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
+  let napi_has_own_property = foreign "napi_has_own_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
+  let napi_set_named_property = foreign "napi_set_named_property" (napi_env @-> napi_value @-> string @-> napi_value @-> returning napi_status)
+  let napi_get_named_property = foreign "napi_get_named_property" (napi_env @-> napi_value @-> string @-> ptr(napi_value) @-> returning napi_status)
+  let napi_has_named_property = foreign "napi_has_named_property" (napi_env @-> napi_value @-> string @-> ptr(bool) @-> returning napi_status)
+  let napi_set_element = foreign "napi_set_element" (napi_env @-> napi_value @-> uint32_t @-> napi_value @-> returning napi_status)
+  let napi_get_element = foreign "napi_get_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(napi_value) @-> returning napi_status)
+  let napi_has_element = foreign "napi_has_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(bool) @-> returning napi_status)
+  let napi_delete_element = foreign "napi_delete_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(bool) @-> returning napi_status)
+  let napi_define_properties = foreign "napi_define_properties" (napi_env @-> napi_value @-> size_t @-> ptr(napi_property_descriptor) @-> returning napi_status)
+end
