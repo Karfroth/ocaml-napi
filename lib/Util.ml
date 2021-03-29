@@ -166,3 +166,12 @@ module Properties = struct
   let napi_delete_element = foreign "napi_delete_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(bool) @-> returning napi_status)
   let napi_define_properties = foreign "napi_define_properties" (napi_env @-> napi_value @-> size_t @-> ptr(napi_property_descriptor) @-> returning napi_status)
 end
+
+module Functions = struct
+  (* Working with JavaScript functions *)
+  let napi_call_function = foreign "napi_call_function" (napi_env @-> napi_value @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
+  let napi_create_function = foreign "napi_create_function" (napi_env @-> string @-> size_t @-> napi_callback @-> ptr(void) @-> ptr(napi_value) @-> returning napi_status)
+  let napi_get_cb_info = foreign "napi_get_cb_info" (napi_env @-> napi_callback_info @-> ptr(size_t) @-> ptr(napi_value) @-> ptr(napi_value) @-> ptr(ptr(void)) @-> returning napi_status)
+  let napi_get_new_target = foreign "napi_get_new_target" (napi_env @-> napi_callback_info @-> ptr(napi_value) @-> returning napi_status)
+  let napi_new_instance = foreign "napi_new_instance" (napi_env @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
+end
