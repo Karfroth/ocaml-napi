@@ -11,3 +11,11 @@ let napi_get_date_value = foreign "napi_get_date_value" (napi_env @-> napi_value
 
 (* Working with JavaScript values and abstract operations *)
 let napi_is_date = foreign "napi_is_date" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
+
+module ObjectWrap = struct
+  include Util.ObjectWrap 
+  open Properties
+
+  (* Object wrap *)
+  let napi_add_finalizer = foreign "napi_add_finalizer" (napi_env @-> napi_value @-> ptr(void) @-> napi_finalize @-> ptr(void) @-> ptr(napi_ref) @-> returning napi_status)
+end

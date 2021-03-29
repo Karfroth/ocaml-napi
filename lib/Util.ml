@@ -175,3 +175,24 @@ module Functions = struct
   let napi_get_new_target = foreign "napi_get_new_target" (napi_env @-> napi_callback_info @-> ptr(napi_value) @-> returning napi_status)
   let napi_new_instance = foreign "napi_new_instance" (napi_env @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
 end
+
+module ObjectWrap = struct
+  open Properties
+
+  (* Object wrap *)
+  let napi_define_class = foreign "napi_define_class" (
+    napi_env @->
+    string @->
+    size_t @->
+    napi_callback @->
+    ptr(void) @->
+    size_t @->
+    ptr(napi_property_descriptor) @->
+    ptr(napi_value) @->
+    returning napi_status
+  )
+  let napi_wrap = foreign "napi_wrap" (napi_env @-> napi_value @-> ptr(void) @-> napi_finalize @-> ptr(void) @-> ptr(napi_ref) @-> returning napi_status)
+  let napi_unwrap = foreign "napi_unwrap" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> returning napi_status)
+  let napi_remove_wrap = foreign "napi_remove_wrap" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> returning napi_status)
+
+end
