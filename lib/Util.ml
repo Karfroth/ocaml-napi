@@ -42,6 +42,21 @@ module Types = struct
   let napi_async_context: napi_async_context typ = ptr void
   type napi_callback_scope = unit ptr
   let napi_callback_scope: napi_callback_scope typ = ptr void
+
+  module NAPINodeVersion = struct
+    type napi_node_version
+    let napi_node_version: napi_node_version structure typ = structure "napi_node_version"
+    
+    type t = napi_node_version
+
+    let major = field napi_node_version "major" uint32_t
+    let minor = field napi_node_version "minor" uint32_t
+    let patch = field napi_node_version "patch" uint32_t
+    let release = field napi_node_version "release" string;;
+    seal napi_node_version;;
+  end
+  type napi_node_version = NAPINodeVersion.napi_node_version
+  let napi_node_version = NAPINodeVersion.napi_node_version
 end
 
 (* Error Handling *)
@@ -239,4 +254,15 @@ module Asynchronous = struct
     ptr(napi_value) @->
     returning napi_status
   )
+end
+
+module VersionManagement = struct
+  open Types
+
+  let napi_get_node_version = foreign "napi_get_node_version" (napi_env @-> ptr(ptr(napi_node_version)) @-> returning napi_status)
+  let napi_get_version = foreign "napi_get_version" (napi_env @-> ptr(uint32_t) @-> returning napi_status)
+end
+
+module MemoryManagement = struct
+  let napi_adjust_external_memory = foreign "napi_adjust_external_memory" (napi_env @-> int64_t @-> ptr(int64_t) @-> returning napi_status)
 end
