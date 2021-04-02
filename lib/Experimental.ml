@@ -14,3 +14,5 @@ let napi_remove_async_cleanup_hook = foreign "napi_remove_async_cleanup_hook" (n
 (* Working with JavaScript properties *)
 (* Structures *)
 let napi_property_attributes = uint64_t (* TODO: ENUM *)
+
+let node_api_get_module_file_name = foreign "node_api_get_module_file_name" (napi_env @-> ptr(string) @-> returning napi_status)
