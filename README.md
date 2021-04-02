@@ -5,6 +5,7 @@
 - [ ] nullable
 - [ ] Types
 - [ ] Dependencies between versions
-- [ ] group by module
+- [x] group by module
 - [ ] esy to opam
 - [ ] example
+- [ ] basic types in a module

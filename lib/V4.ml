@@ -1,9 +1,9 @@
 open Ctypes
 open Foreign
-open Util
+include V3
 
 module Types = struct
-  include Util.Types
+  include V3.Types
   (* Basic Node-API data types *)
   type napi_threadsafe_function = unit ptr
   let napi_threadsafe_function: napi_threadsafe_function typ = ptr void
@@ -15,7 +15,7 @@ end
 
 module Asynchronous = struct
   open Types
-  include Util.Asynchronous
+  include V3.Asynchronous
 
   (* Asynchronous thread-safe function calls *)
   let napi_create_threadsafe_function = foreign "napi_create_threadsafe_function" (
