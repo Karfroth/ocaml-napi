@@ -278,3 +278,7 @@ module Promises = struct
   let napi_reject_deferred = foreign "napi_reject_deferred" (napi_env @-> napi_deferred @-> napi_value @-> returning napi_status)
   let napi_is_promise = foreign "napi_is_promise" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
 end
+
+module ScriptExecution = struct
+  let napi_run_script = foreign "napi_run_script" (napi_env @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
+end
