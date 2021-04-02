@@ -57,6 +57,9 @@ module Types = struct
   end
   type napi_node_version = NAPINodeVersion.napi_node_version
   let napi_node_version = NAPINodeVersion.napi_node_version
+
+  type napi_deferred = unit ptr
+  let napi_deferred: napi_deferred typ = ptr void
 end
 
 (* Error Handling *)
@@ -265,4 +268,13 @@ end
 
 module MemoryManagement = struct
   let napi_adjust_external_memory = foreign "napi_adjust_external_memory" (napi_env @-> int64_t @-> ptr(int64_t) @-> returning napi_status)
+end
+
+module Promises = struct
+  open Types
+
+  let napi_create_promise = foreign "napi_create_promise" (napi_env @-> ptr(napi_deferred) @-> ptr(napi_value) @-> returning napi_status)
+  let napi_resolve_deferred = foreign "napi_resolve_deferred" (napi_env @-> napi_deferred @-> napi_value @-> returning napi_status)
+  let napi_reject_deferred = foreign "napi_reject_deferred" (napi_env @-> napi_deferred @-> napi_value @-> returning napi_status)
+  let napi_is_promise = foreign "napi_is_promise" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
 end
