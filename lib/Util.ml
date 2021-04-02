@@ -32,6 +32,17 @@ type napi_callback_info = unit ptr
 let napi_callback_info: napi_callback_info typ = ptr void
 let napi_callback = funptr (napi_env @-> napi_callback_info @-> returning napi_value)
 
+module Types = struct
+  let napi_async_execute_callback = funptr (napi_env @-> ptr(void) @-> returning void)
+  let napi_async_complete_callback = funptr (napi_env @-> napi_status @-> ptr(void) @-> returning void)
+
+  type napi_async_work = unit ptr
+  let napi_async_work: napi_async_work typ = ptr void
+  type napi_async_context = unit ptr
+  let napi_async_context: napi_async_context typ = ptr void
+  type napi_callback_scope = unit ptr
+  let napi_callback_scope: napi_callback_scope typ = ptr void
+end
 
 (* Error Handling *)
 let napi_get_last_error_info = foreign "napi_get_last_error_info" (napi_env @-> ptr(ptr(napi_extended_error_info)) @-> returning napi_status)
@@ -195,4 +206,37 @@ module ObjectWrap = struct
   let napi_unwrap = foreign "napi_unwrap" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> returning napi_status)
   let napi_remove_wrap = foreign "napi_remove_wrap" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> returning napi_status)
 
+end
+
+module Asynchronous = struct
+  open Types
+
+  (* Simple asynchronous operations *)
+  let napi_create_async_work = foreign "napi_create_async_work" (
+    napi_env @->
+    napi_value @->
+    napi_value @->
+    napi_async_execute_callback  @->
+    napi_async_complete_callback @->
+    ptr(void) @->
+    ptr(napi_async_work) @->
+    returning napi_status
+  )
+  let napi_delete_async_work = foreign "napi_delete_async_work" (napi_env @-> napi_async_work @-> returning napi_status)
+  let napi_queue_async_work = foreign "napi_queue_async_work" (napi_env @-> napi_async_work @-> returning napi_status)
+  let napi_cancel_async_work = foreign "napi_cancel_async_work" (napi_env @-> napi_async_work @-> returning napi_status)
+
+  (* Custom asynchronous operations *)
+  let napi_async_init = foreign "napi_async_init" (napi_env @-> napi_value @-> napi_value @-> ptr(napi_async_context) @-> returning napi_status)
+  let napi_async_destroy = foreign "napi_async_destroy" (napi_env @-> napi_async_context @-> returning napi_status)
+  let napi_make_callback = foreign "napi_make_callback" (
+    napi_env @->
+    napi_async_context @->
+    napi_value @->
+    napi_value @->
+    size_t @->
+    ptr(napi_value) @->
+    ptr(napi_value) @->
+    returning napi_status
+  )
 end
