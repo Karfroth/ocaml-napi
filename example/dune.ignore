@@ -1,0 +1,14 @@
+(executable
+ (name mylib)
+ (libraries ctypes ctypes.foreign lib)
+ (foreign_stubs
+  (language c)
+  (names mylib)
+  (flags -I<PATH>))
+ (ocamlopt_flags :standard -fPIC -runtime-variant _pic)
+ (flags :standard -linkall)
+ (modes (native shared_object)))
+
+(install
+ (section lib)
+ (files (mylib.so as libmylib.so) mylib.h))
