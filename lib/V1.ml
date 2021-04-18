@@ -13,11 +13,11 @@ module Types = struct
   let error_code = field napi_extended_error_info "error_code" napi_status;;
   seal napi_extended_error_info;;
 
-  type napi_env = unit ptr option
-  let napi_env: napi_env typ = ptr_opt void
+  type napi_env = unit ptr
+  let napi_env: napi_env typ = ptr void
 
-  type napi_value = unit ptr option
-  let napi_value: napi_value typ = ptr_opt void
+  type napi_value = unit ptr
+  let napi_value: napi_value typ = ptr void
 
   let napi_finalize = funptr (napi_env @-> ptr(void) @-> ptr(void) @-> returning void)
 
@@ -179,6 +179,8 @@ end
 (* Working with JavaScript properties *)
 (* Structures *)
 module Properties = struct
+  open Types
+
   let napi_property_attributes = uint64_t (* TODO: ENUM *)
   type napi_property_descriptor
   let napi_property_descriptor: napi_property_descriptor structure typ = structure "napi_property_descriptor"
@@ -198,7 +200,7 @@ module Properties = struct
   let napi_has_property = foreign "napi_has_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status);;
   let napi_delete_property = foreign "napi_delete_property" (napi_env @-> napi_value @-> napi_value @-> ptr_opt(bool) @-> returning napi_status)
   let napi_has_own_property = foreign "napi_has_own_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
-  let napi_set_named_property = foreign "napi_set_named_property" (napi_env @-> napi_value @-> string @-> napi_value @-> returning napi_status)
+  let napi_set_named_property = foreign "napi_set_named_property" (napi_env @-> napi_value @-> ptr(char) @-> napi_value @-> returning napi_status)
   let napi_get_named_property = foreign "napi_get_named_property" (napi_env @-> napi_value @-> string @-> ptr(napi_value) @-> returning napi_status)
   let napi_has_named_property = foreign "napi_has_named_property" (napi_env @-> napi_value @-> string @-> ptr(bool) @-> returning napi_status)
   let napi_set_element = foreign "napi_set_element" (napi_env @-> napi_value @-> uint32_t @-> napi_value @-> returning napi_status)
@@ -211,8 +213,8 @@ end
 module Functions = struct
   (* Working with JavaScript functions *)
   let napi_call_function = foreign "napi_call_function" (napi_env @-> napi_value @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
-  let napi_create_function = foreign "napi_create_function" (napi_env @-> string @-> size_t @-> napi_callback @-> ptr(void) @-> ptr(napi_value) @-> returning napi_status)
-  let napi_get_cb_info = foreign "napi_get_cb_info" (napi_env @-> napi_callback_info @-> ptr(size_t) @-> ptr(napi_value) @-> ptr(napi_value) @-> ptr(ptr(void)) @-> returning napi_status)
+  let napi_create_function = foreign "napi_create_function" (napi_env @-> ptr(char) @-> size_t @-> napi_callback @-> ptr(void) @-> ptr(napi_value) @-> returning napi_status)
+  let napi_get_cb_info = foreign "napi_get_cb_info" (napi_env @-> napi_callback_info @-> ptr(size_t) @-> ptr(napi_value) @-> ptr_opt(napi_value) @-> ptr_opt(ptr(void)) @-> returning napi_status)
   let napi_get_new_target = foreign "napi_get_new_target" (napi_env @-> napi_callback_info @-> ptr_opt(napi_value) @-> returning napi_status)
   let napi_new_instance = foreign "napi_new_instance" (napi_env @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
 end

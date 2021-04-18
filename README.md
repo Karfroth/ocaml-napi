@@ -9,3 +9,4 @@
 - [ ] esy to opam
 - [ ] example
 - [x] basic types in a module
+- [ ] nullable env

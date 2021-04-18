@@ -23,6 +23,7 @@ end
 
 module Properties = struct
   include JSValues
+  include V5.Properties
 
   let napi_get_all_property_names = foreign "napi_get_all_property_names" (napi_env @-> napi_value @-> napi_key_collection_mode @-> napi_key_filter @-> napi_key_conversion @-> ptr(napi_value) @-> returning napi_status)
 end
