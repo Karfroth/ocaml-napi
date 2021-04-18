@@ -2,7 +2,7 @@
 - [ ] Module registration
 - [ ] libuv event loop
 - [x] Move some declarations from `Experimental` to `V8`
-- [ ] nullable
+- [x] nullable
 - [x] Types
 - [x] Dependencies between versions
 - [x] group by module

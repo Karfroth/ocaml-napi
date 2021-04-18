@@ -10,7 +10,7 @@ module Types = struct
 
   let napi_threadsafe_function_release_mode = uint64_t (* TODO: enum *)
   let napi_threadsafe_function_call_mode = uint64_t (* TODO: enum *)
-  let napi_threadsafe_function_call_js = funptr (napi_env @-> napi_value @-> ptr(void) @-> ptr(void) @-> returning void)
+  let napi_threadsafe_function_call_js = funptr_opt (napi_env @-> napi_value @-> ptr(void) @-> ptr(void) @-> returning void)
 end
 
 module Asynchronous = struct

@@ -32,7 +32,7 @@ module ObjectLifetime = struct
   include V7.ObjectLifetime
 
   (* Cleanup on exit of the current Node.js instance *)
-  let napi_add_async_cleanup_hook = foreign "napi_add_async_cleanup_hook" (napi_env @-> napi_async_cleanup_hook @-> ptr(void) @-> ptr(napi_async_cleanup_hook_handle) @-> returning napi_status)
+  let napi_add_async_cleanup_hook = foreign "napi_add_async_cleanup_hook" (napi_env @-> napi_async_cleanup_hook @-> ptr(void) @-> ptr_opt(napi_async_cleanup_hook_handle) @-> returning napi_status)
   let napi_remove_async_cleanup_hook = foreign "napi_remove_async_cleanup_hook" (napi_async_cleanup_hook_handle @-> returning napi_status)
 end
 

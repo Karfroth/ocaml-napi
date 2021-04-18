@@ -13,11 +13,11 @@ module Types = struct
   let error_code = field napi_extended_error_info "error_code" napi_status;;
   seal napi_extended_error_info;;
 
-  type napi_env = unit ptr
-  let napi_env: napi_env typ = ptr void
+  type napi_env = unit ptr option
+  let napi_env: napi_env typ = ptr_opt void
 
-  type napi_value = unit ptr
-  let napi_value: napi_value typ = ptr void
+  type napi_value = unit ptr option
+  let napi_value: napi_value typ = ptr_opt void
 
   let napi_finalize = funptr (napi_env @-> ptr(void) @-> ptr(void) @-> returning void)
 
@@ -80,7 +80,7 @@ module ErrorHandling = struct
   let napi_create_type_error = foreign "napi_create_type_error" (napi_env @-> napi_value @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
   let napi_create_range_error = foreign "napi_create_range_error"  (napi_env @-> napi_value @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
 
-  let napi_get_and_clear_last_exception = foreign "napi_get_and_clear_last_exception" (napi_env @-> ptr(napi_value) @-> returning napi_status)
+  let napi_get_and_clear_last_exception = foreign "napi_get_and_clear_last_exception" (napi_env @-> ptr_opt(napi_value) @-> returning napi_status)
   let napi_is_exception_pending = foreign "napi_is_exception_pending" (napi_env @-> ptr(bool) @-> returning napi_status)
 
   (* Fatal errors *)
@@ -102,7 +102,7 @@ module ObjectLifetime = struct
   let napi_delete_reference = foreign "napi_delete_reference" (napi_env @-> napi_ref @-> returning napi_status)
   let napi_reference_ref = foreign "napi_reference_ref" (napi_env @-> napi_ref @-> ptr(uint32_t) @-> returning napi_status)
   let napi_reference_unref = foreign "napi_reference_unref" (napi_env @-> napi_ref @-> ptr(uint32_t) @-> returning napi_status)
-  let napi_get_reference_value = foreign "napi_get_reference_value" (napi_env @-> napi_ref @-> ptr(napi_value) @-> returning napi_status)
+  let napi_get_reference_value = foreign "napi_get_reference_value" (napi_env @-> napi_ref @-> ptr_opt(napi_value) @-> returning napi_status)
 end
 
 module JSValues = struct
@@ -135,19 +135,19 @@ module JSValues = struct
 
   (* Functions to convert from Node-API to C types *)
   let napi_get_array_length = foreign "napi_get_array_length" (napi_env @-> napi_value @-> ptr(uint32_t) @-> returning napi_status)
-  let napi_get_arraybuffer_info = foreign "napi_get_arraybuffer_info" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> ptr(size_t) @-> returning napi_status)
-  let napi_get_buffer_info = foreign "napi_get_buffer_info" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_arraybuffer_info = foreign "napi_get_arraybuffer_info" (napi_env @-> napi_value @-> ptr_opt(ptr(void)) @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_buffer_info = foreign "napi_get_buffer_info" (napi_env @-> napi_value @-> ptr_opt(ptr(void)) @-> ptr(size_t) @-> returning napi_status)
   let napi_get_prototype = foreign "napi_get_prototype" (napi_env @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
-  let napi_get_typedarray_info = foreign "napi_get_typedarray_info" (napi_env @-> napi_value @-> ptr(napi_typedarray_type) @-> ptr(size_t) @-> ptr(ptr(void)) @-> ptr(napi_value) @-> ptr(size_t) @-> returning napi_status)
-  let napi_get_dataview_info = foreign "napi_get_dataview_info" (napi_env @-> napi_value @-> ptr(size_t) @-> ptr(ptr(void)) @-> ptr(napi_value) @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_typedarray_info = foreign "napi_get_typedarray_info" (napi_env @-> napi_value @-> ptr(napi_typedarray_type) @-> ptr(size_t) @-> ptr_opt(ptr(void)) @-> ptr(napi_value) @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_dataview_info = foreign "napi_get_dataview_info" (napi_env @-> napi_value @-> ptr(size_t) @-> ptr_opt(ptr(void)) @-> ptr(napi_value) @-> ptr(size_t) @-> returning napi_status)
   let napi_get_value_bool = foreign "napi_get_value_bool" (napi_env @-> napi_value @-> ptr(bool) @-> returning napi_status)
   let napi_get_value_double = foreign "napi_get_value_double" (napi_env @-> napi_value @-> ptr(double) @-> returning napi_status)
   let napi_get_value_external = foreign "napi_get_value_external" (napi_env @-> napi_value @-> ptr(ptr(void)) @-> returning napi_status)
   let napi_get_value_int32 = foreign "napi_get_value_int32" (napi_env @-> napi_value @-> ptr(int32_t) @-> returning napi_status)
   let napi_get_value_int64 = foreign "napi_get_value_int64" (napi_env @-> napi_value @-> ptr(int64_t) @-> returning napi_status)
-  let napi_get_value_string_latin1 = foreign "napi_get_value_string_latin1" (napi_env @-> napi_value @-> ptr(char) @-> size_t @-> ptr(size_t) @-> returning napi_status)
-  let napi_get_value_string_utf8 = foreign "napi_get_value_string_utf8" (napi_env @-> napi_value @-> ptr(char) @-> size_t @-> ptr(size_t) @-> returning napi_status)
-  let napi_get_value_string_utf16 = foreign "napi_get_value_string_utf16" (napi_env @-> napi_value @-> ptr(uint16_t) @-> size_t @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_value_string_latin1 = foreign "napi_get_value_string_latin1" (napi_env @-> napi_value @-> ptr_opt(char) @-> size_t @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_value_string_utf8 = foreign "napi_get_value_string_utf8" (napi_env @-> napi_value @-> ptr_opt(char) @-> size_t @-> ptr(size_t) @-> returning napi_status)
+  let napi_get_value_string_utf16 = foreign "napi_get_value_string_utf16" (napi_env @-> napi_value @-> ptr_opt(uint16_t) @-> size_t @-> ptr(size_t) @-> returning napi_status)
   let napi_get_value_uint32 = foreign "napi_get_value_uint32" (napi_env @-> napi_value @-> ptr(uint32_t) @-> returning napi_status)
 
   (* Functions to get global instances *)
@@ -182,7 +182,7 @@ module Properties = struct
   let napi_property_attributes = uint64_t (* TODO: ENUM *)
   type napi_property_descriptor
   let napi_property_descriptor: napi_property_descriptor structure typ = structure "napi_property_descriptor"
-  let utf8name = field napi_property_descriptor "utf8name" string
+  let utf8name = field napi_property_descriptor "utf8name" (ptr_opt char)
   let name = field napi_property_descriptor "name" napi_value
   let _method = field napi_property_descriptor "method" napi_callback
   let getter = field napi_property_descriptor "getter" napi_callback
@@ -196,7 +196,7 @@ module Properties = struct
   let napi_set_property = foreign "napi_set_property" (napi_env @-> napi_value @-> napi_value @-> napi_value @-> returning napi_status)
   let napi_get_property = foreign "napi_get_property" (napi_env @-> napi_value @-> napi_value @-> ptr(napi_value) @-> returning napi_status)
   let napi_has_property = foreign "napi_has_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status);;
-  let napi_delete_property = foreign "napi_delete_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
+  let napi_delete_property = foreign "napi_delete_property" (napi_env @-> napi_value @-> napi_value @-> ptr_opt(bool) @-> returning napi_status)
   let napi_has_own_property = foreign "napi_has_own_property" (napi_env @-> napi_value @-> napi_value @-> ptr(bool) @-> returning napi_status)
   let napi_set_named_property = foreign "napi_set_named_property" (napi_env @-> napi_value @-> string @-> napi_value @-> returning napi_status)
   let napi_get_named_property = foreign "napi_get_named_property" (napi_env @-> napi_value @-> string @-> ptr(napi_value) @-> returning napi_status)
@@ -204,7 +204,7 @@ module Properties = struct
   let napi_set_element = foreign "napi_set_element" (napi_env @-> napi_value @-> uint32_t @-> napi_value @-> returning napi_status)
   let napi_get_element = foreign "napi_get_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(napi_value) @-> returning napi_status)
   let napi_has_element = foreign "napi_has_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(bool) @-> returning napi_status)
-  let napi_delete_element = foreign "napi_delete_element" (napi_env @-> napi_value @-> uint32_t @-> ptr(bool) @-> returning napi_status)
+  let napi_delete_element = foreign "napi_delete_element" (napi_env @-> napi_value @-> uint32_t @-> ptr_opt(bool) @-> returning napi_status)
   let napi_define_properties = foreign "napi_define_properties" (napi_env @-> napi_value @-> size_t @-> ptr(napi_property_descriptor) @-> returning napi_status)
 end
 
@@ -213,7 +213,7 @@ module Functions = struct
   let napi_call_function = foreign "napi_call_function" (napi_env @-> napi_value @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
   let napi_create_function = foreign "napi_create_function" (napi_env @-> string @-> size_t @-> napi_callback @-> ptr(void) @-> ptr(napi_value) @-> returning napi_status)
   let napi_get_cb_info = foreign "napi_get_cb_info" (napi_env @-> napi_callback_info @-> ptr(size_t) @-> ptr(napi_value) @-> ptr(napi_value) @-> ptr(ptr(void)) @-> returning napi_status)
-  let napi_get_new_target = foreign "napi_get_new_target" (napi_env @-> napi_callback_info @-> ptr(napi_value) @-> returning napi_status)
+  let napi_get_new_target = foreign "napi_get_new_target" (napi_env @-> napi_callback_info @-> ptr_opt(napi_value) @-> returning napi_status)
   let napi_new_instance = foreign "napi_new_instance" (napi_env @-> napi_value @-> size_t @-> ptr(napi_value) @-> ptr(napi_value) @-> returning napi_status)
 end
 
