@@ -1,7 +1,7 @@
 ## TODO
 - [ ] Module registration
 - [ ] libuv event loop
-- [ ] Move some declarations from `Experimental` to `V8`
+- [x] Move some declarations from `Experimental` to `V8`
 - [ ] nullable
 - [ ] Types
 - [ ] Dependencies between versions
