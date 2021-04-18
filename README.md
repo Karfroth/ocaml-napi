@@ -3,9 +3,9 @@
 - [ ] libuv event loop
 - [x] Move some declarations from `Experimental` to `V8`
 - [ ] nullable
-- [ ] Types
-- [ ] Dependencies between versions
+- [x] Types
+- [x] Dependencies between versions
 - [x] group by module
 - [ ] esy to opam
 - [ ] example
-- [ ] basic types in a module
+- [x] basic types in a module
