@@ -62,7 +62,7 @@ module Types = struct
   let napi_deferred: napi_deferred typ = ptr void
 end
 
-include Types
+open Types
 
 module ErrorHandling = struct
   open Types

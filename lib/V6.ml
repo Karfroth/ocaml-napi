@@ -1,6 +1,7 @@
 open Ctypes
 open Foreign
 include V5
+open Types
 
 (* Working with JavaScript values *)
 module JSValues = struct

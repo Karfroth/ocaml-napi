@@ -1,6 +1,7 @@
 open Ctypes
 open Foreign
 include V6
+open Types
 
 (* Working with JavaScript values and abstract operations *)
 module AbstractOperations = struct

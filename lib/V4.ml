@@ -1,6 +1,7 @@
 open Ctypes
 open Foreign
 include V3
+open Types
 
 module Types = struct
   include V3.Types

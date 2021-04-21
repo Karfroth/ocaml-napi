@@ -1,6 +1,7 @@
 open Ctypes
 open Foreign
 include V1
+open Types
 
 (* Exceptions *)
 module ErrorHandling = struct

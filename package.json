@@ -20,6 +20,7 @@
     "@opam/ctypes": "0.15.0",
     "@opam/ctypes-foreign": "0.4.0",
     "@opam/dune": "*",
+    "@opam/uutf": "1.0.2",
     "ocaml": "~4.11.1000"
   },
   "devDependencies": {
