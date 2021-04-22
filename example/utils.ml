@@ -51,6 +51,11 @@ let from_napi_str env napiStr =
   let resStatus2 = napi_get_value_string_utf8 env napiStr (Some buf) newStrSize strSizeReadPtr in
   (Ctypes.string_from_ptr ~length: strLength buf) |> convert_to_ocaml_str
 
+let from_napi_num_to_float env napi_num =
+  let float_ptr = allocate Ctypes.double (-1.0) in
+  let conversion_result = napi_get_value_double env napi_num float_ptr in
+  !@float_ptr
+
 let get_args_arr env cbInfo len =
   let sizeTLen = Unsigned.Size_t.of_int len in
   let sizeTLenPtr = allocate size_t sizeTLen

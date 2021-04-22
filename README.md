@@ -10,3 +10,4 @@
 - [ ] example
 - [x] basic types in a module
 - [ ] nullable env
+- [ ] Version module as functor to avoid `foreign` invoked at init

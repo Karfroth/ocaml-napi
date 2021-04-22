@@ -131,7 +131,7 @@ module JSValues = struct
   let napi_create_double = foreign "napi_create_double" (napi_env @-> double @-> ptr(napi_value) @-> returning napi_status)
   let napi_create_string_latin1 = foreign "napi_create_string_latin1" (napi_env @-> string @-> size_t @-> ptr(napi_value) @-> returning napi_status)
   let napi_create_string_utf16 = foreign "napi_create_string_utf16" (napi_env @-> ptr(uint16_t) @-> size_t @-> ptr(napi_value) @-> returning napi_status) (* TODO: char16_t *)
-  let napi_create_string_utf8 = foreign "napi_create_string_utf8" (napi_env @-> string @-> size_t @-> ptr(napi_value) @-> returning napi_status) (* TODO: char16_t *)
+  let napi_create_string_utf8 = foreign "napi_create_string_utf8" (napi_env @-> string @-> size_t @-> ptr(napi_value) @-> returning napi_status)
 
   (* Functions to convert from Node-API to C types *)
   let napi_get_array_length = foreign "napi_get_array_length" (napi_env @-> napi_value @-> ptr(uint32_t) @-> returning napi_status)
