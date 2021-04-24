@@ -59,8 +59,14 @@ let from_napi_num_to_float env napi_num =
 let get_args_arr env cbInfo len =
   let sizeTLen = Unsigned.Size_t.of_int len in
   let sizeTLenPtr = allocate size_t sizeTLen
-  and args = CArray.make napi_value len in
-  let res = napi_get_cb_info env cbInfo sizeTLenPtr (CArray.start args) None None in
+  and args = CArray.make nativeint len in
+  let res = Lib.V1Raw.napi_get_cb_info_c 
+    (env |> raw_address_of_ptr)
+    (cbInfo |> raw_address_of_ptr)
+    (sizeTLenPtr |> to_voidp |> raw_address_of_ptr)
+    (args |> CArray.start |> to_voidp |> raw_address_of_ptr)
+    (null |> raw_address_of_ptr)
+    (null |> raw_address_of_ptr) in
   args
 
 let get_value_from_obj env obj key_str =
