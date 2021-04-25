@@ -30,12 +30,6 @@ let convert_to_ocaml_str ?encoding str =
   let nln = `Readline (Uchar.of_int 0x000A) in
   (loop (Uutf.decoder ~nln ?encoding src) (Buffer.create 512) []) |> String.concat ""
 
-let to_napi_str env str =
-  let strValue = allocate_n napi_value ~count: 1 in
-  let strLen =  (String.length str) |> Unsigned.Size_t.of_int in
-  let resStatus = napi_create_string_utf8 env str strLen strValue in
-  strValue
-
 let to_napi_number env num =
   let num_value = allocate_n napi_value ~count: 1 in
   let resStatus = napi_create_double env num num_value in
@@ -51,6 +45,16 @@ let from_napi_str env napiStr =
   let resStatus2 = napi_get_value_string_utf8 env napiStr (Some buf) newStrSize strSizeReadPtr in
   (Ctypes.string_from_ptr ~length: strLength buf) |> convert_to_ocaml_str
 
+let to_napi_str env str =
+  let strValue = allocate_n napi_value ~count: 1 in
+  let strLen = str |> String.length |> Unsigned.Size_t.of_int in
+  let resStatus = Lib.V1Raw.napi_create_string_utf8
+    (env |> Lib.V1Raw.Types.to_napi_env)
+    str
+    (strValue |> Lib.V1Raw.Types.to_pointer)
+  in
+  strValue
+
 let from_napi_num_to_float env napi_num =
   let float_ptr = allocate Ctypes.double (-1.0) in
   let conversion_result = napi_get_value_double env napi_num float_ptr in
@@ -60,9 +64,9 @@ let get_args_arr env cbInfo len =
   let sizeTLen = Unsigned.Size_t.of_int len in
   let sizeTLenPtr = allocate size_t sizeTLen
   and args = CArray.make nativeint len in
-  let res = Lib.V1Raw.napi_get_cb_info_c 
-    (env |> raw_address_of_ptr)
-    (cbInfo |> raw_address_of_ptr)
+  let res = Lib.V1Raw.napi_get_cb_info
+    (env |> Lib.V1Raw.Types.to_napi_env)
+    (cbInfo |> Lib.V1Raw.Types.to_napi_callback_info)
     (sizeTLenPtr |> to_voidp |> raw_address_of_ptr)
     (args |> CArray.start |> to_voidp |> raw_address_of_ptr)
     (null |> raw_address_of_ptr)
