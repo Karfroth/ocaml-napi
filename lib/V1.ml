@@ -277,7 +277,7 @@ module VersionManagement = struct
   open Types
 
   let napi_get_node_version = foreign "napi_get_node_version" (napi_env @-> ptr(ptr(napi_node_version)) @-> returning napi_status)
-  let napi_get_version = foreign "napi_get_version" (napi_env @-> ptr(uint32_t) @-> returning napi_status)
+  (* let napi_get_version = foreign "napi_get_version" (napi_env @-> ptr(uint32_t) @-> returning napi_status) *)
 end
 
 module MemoryManagement = struct

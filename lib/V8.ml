@@ -53,3 +53,5 @@ module ObjectWrap = struct
   let napi_type_tag_object = foreign "napi_type_tag_object" (napi_env @-> napi_value @-> ptr(napi_type_tag) @-> returning napi_status)
   let napi_check_object_type_tag = foreign "napi_check_object_type_tag" (napi_env @-> napi_value @-> ptr(napi_type_tag) @-> ptr(bool) @-> returning napi_status)
 end
+
+external napi_get_version: napi_env -> int = "napi_get_version"

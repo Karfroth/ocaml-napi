@@ -1,4 +1,8 @@
 (library
   (name lib)
   (public_name hello-ocaml)
-  (libraries ctypes ctypes.foreign))
+  (libraries ctypes ctypes.foreign)
+  (foreign_stubs
+    (language cxx)
+    (names v1)
+    (flags -O3 -fPIC -I/home/wlee/.nvm/versions/node/v14.17.1/include/node)))

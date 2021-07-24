@@ -1,13 +1,13 @@
 (executable
  (name mylib)
- (libraries ctypes ctypes.foreign lib)
+ (libraries ctypes ctypes.foreign lib uutf)
  (foreign_stubs
   (language c)
   (names mylib)
-  (flags -I<PATH>))
+  (flags -I/home/wlee/.nvm/versions/node/v14.17.1/include/node))
  (ocamlopt_flags :standard -fPIC -runtime-variant _pic)
  (flags :standard -linkall)
- (modes (native shared_object)))
+ (modes shared_object))
 
 (install
  (section lib)
