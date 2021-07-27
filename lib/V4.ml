@@ -1,4 +1,4 @@
-open Ctypes
+(* open Ctypes
 open Foreign
 include V3
 open Types
@@ -39,4 +39,4 @@ module Asynchronous = struct
   let napi_release_threadsafe_function = foreign "napi_release_threadsafe_function" (napi_threadsafe_function @-> napi_threadsafe_function_release_mode @-> returning napi_status)
   let napi_ref_threadsafe_function = foreign "napi_ref_threadsafe_function" (napi_env @-> napi_threadsafe_function @-> returning napi_status)
   let napi_unref_threadsafe_function = foreign "napi_unref_threadsafe_function" (napi_env @-> napi_threadsafe_function @-> returning napi_status)
-end
+end *)

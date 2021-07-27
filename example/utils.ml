@@ -1,9 +1,9 @@
 open Ctypes
 open Foreign
-open Lib.V8.Types
-open Lib.V8.Functions
-open Lib.V8.JSValues
-open Lib.V8.Properties
+open Lib.V1.Types
+open Lib.V1.Functions
+open Lib.V1.JSValues
+open Lib.V1.Properties
 
 let add_to_init env exports name f =
   let fn = allocate_n napi_value ~count: 1 in

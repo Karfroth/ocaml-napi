@@ -1,4 +1,4 @@
-open Ctypes
+(* open Ctypes
 open Foreign
 include V5
 open Types
@@ -32,4 +32,4 @@ end
 module EnvironmentLifeCycle = struct
   let napi_set_instance_data = foreign "napi_set_instance_data" (napi_env @-> ptr(void) @-> napi_finalize @-> ptr(void) @-> returning napi_status)
   let napi_get_instance_data = foreign "napi_get_instance_data" (napi_env @-> ptr_opt(ptr(void)) @-> returning napi_status)
-end
+end *)

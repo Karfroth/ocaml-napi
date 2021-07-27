@@ -1,4 +1,4 @@
-open Ctypes
+(* open Ctypes
 open Foreign
 include V1
 open Types
@@ -24,4 +24,4 @@ module Asynchronous = struct
 
   let napi_open_callback_scope = foreign "napi_open_callback_scope" (napi_env @-> napi_value @-> napi_async_context @-> ptr(napi_callback_scope) @-> returning napi_status)
   let napi_close_callback_scope = foreign "napi_close_callback_scope" (napi_env @-> napi_callback_scope @-> returning napi_status)
-end
+end *)

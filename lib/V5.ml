@@ -1,4 +1,4 @@
-open Ctypes
+(* open Ctypes
 open Foreign
 include V4
 open Types
@@ -26,4 +26,4 @@ module ObjectWrap = struct
 
   (* Object wrap *)
   let napi_add_finalizer = foreign "napi_add_finalizer" (napi_env @-> napi_value @-> ptr(void) @-> napi_finalize @-> ptr(void) @-> ptr(napi_ref) @-> returning napi_status)
-end
+end *)

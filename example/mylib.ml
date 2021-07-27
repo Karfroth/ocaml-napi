@@ -1,8 +1,8 @@
 open Ctypes
 open Foreign
-open Lib.V8.Types
-open Lib.V8.Functions
-open Lib.V8.Properties
+open Lib.V1.Types
+open Lib.V1.Functions
+open Lib.V1.Properties
 open Utils
 open Hello
 open Calc
@@ -11,8 +11,8 @@ open Calc
 let lib_init envNat exportNat =
   let env = ptr_of_raw_address envNat in
   let exports = ptr_of_raw_address exportNat in
-  add_to_init env exports "hello" hello;
-  add_to_init env exports "calc" calc;
+  (add_to_init env exports "hello" hello) |> ignore;
+  (add_to_init env exports "calc" calc) |> ignore;
   exportNat
 
 let () =
